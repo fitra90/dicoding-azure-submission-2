@@ -149,7 +149,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             //MOVE FILES TO PROJECT UPLOAD DIRECTORY
             move_uploaded_file($temp_name, $path_filename_ext);
             // echo "Congratulations! File Uploaded to Project Directory.";
-            echo "<img src='".$path_filename_ext."' style='width:50%;'>";
+            echo "<img src='".$path_filename_ext."' style='width:20%;'>";
 
             $fileToUpload = $path_filename_ext;
 
