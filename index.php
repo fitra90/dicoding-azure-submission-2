@@ -155,7 +155,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
 
       
 
-        try {
+        // try {
 
             // Getting local file so that we can upload it to Azure
             // $myfile = fopen($fileToUpload, "w") or die("Unable to open file!");
@@ -186,17 +186,17 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             // header('Content-Disposition: attachment; filename="' . $blob_name . '"');
             // fpassthru($blob->getContentStream());
 
-        } catch (ServiceException $e) {
-            $code = $e->getCode();
-            $error_message = $e->getMessage();
-            echo $code . ": " . $error_message . "<br />";
+        // } catch (ServiceException $e) {
+        //     $code = $e->getCode();
+        //     $error_message = $e->getMessage();
+        //     echo $code . ": " . $error_message . "<br />";
 
-        } catch (InvalidArgumentTypeException $e) {
+        // } catch (InvalidArgumentTypeException $e) {
 
-            $code = $e->getCode();
-            $error_message = $e->getMessage();
-            echo $code . ": " . $error_message . "<br />";
-        }
+        //     $code = $e->getCode();
+        //     $error_message = $e->getMessage();
+        //     echo $code . ": " . $error_message . "<br />";
+        // }
 
        
     }
