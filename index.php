@@ -171,7 +171,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
         try {
 
             $fileToUpload = $_FILES['berkas']['name'];
-            $content = fopen($_FILES['berkas']['tmp_name'], "r");
+            $content = file_get_contents($_FILES['gambar']['tmp_name']);
 
             $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
 
