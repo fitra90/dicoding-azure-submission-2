@@ -180,10 +180,11 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             // Get blob.
             echo "This is the content of the blob uploaded: ";
             $blob = $blobClient->getBlob($containerName, $fileToUpload);
-            header("Content-Type:".$_FILES['berkas']['type']);
-            header('Content-Disposition: attachment; filename="' . $blob_name . '"');
-            fpassthru($blob->getContentStream());
-            echo "<br />";
+            var_dump($blob);
+            // header("Content-Type:".$_FILES['berkas']['type']);
+            // header('Content-Disposition: attachment; filename="' . $blob_name . '"');
+            // fpassthru($blob->getContentStream());
+            // echo "<br />";
 
         } catch (ServiceException $e) {
             $code = $e->getCode();
