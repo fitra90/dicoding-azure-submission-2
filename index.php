@@ -173,17 +173,19 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             $fileToUpload = $_FILES['berkas']['name'];
             $content = file_get_contents($_FILES['berkas']['tmp_name']);
 
-            $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
+            $blobClient->createBlockBlob($containerName, $content, $fileToUpload);
 
             // $type = $_FILES['berkas']['type'];
             // $blob_name = $_FILES['berkas']['name'];
             // Get blob.
             echo "This is the content of the blob uploaded: ";
             $blob = $blobClient->getBlob($containerName, $fileToUpload);
-            var_dump($blob);
             // header("Content-Type:".$_FILES['berkas']['type']);
             // header('Content-Disposition: attachment; filename="' . $blob_name . '"');
-            // fpassthru($blob->getContentStream());
+            $vars =  fpassthru($blob->getContentStream());
+
+            var_dump($vars);
+
             // echo "<br />";
 
         } catch (ServiceException $e) {
