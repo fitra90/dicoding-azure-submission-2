@@ -171,7 +171,13 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             //Upload blob
             // $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
             $content = fopen($_FILES['berkas']['tmp_name'] . '', "r");
-            $blob->uploadToContainer($content, $containerName);
+            $uploadData = $blob->uploadToContainer($content, $containerName);
+
+            if($uploadData) {
+                echo "Success";
+            } else {
+                echo "Fail!";
+            }
 
             // $type = $_FILES['berkas']['type'];
             // $blob_name = $_FILES['berkas']['name'];
