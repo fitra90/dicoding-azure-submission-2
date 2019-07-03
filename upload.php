@@ -1,80 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        <input type="file" name="berkas" />
+        <input type="submit" name="SubmitButton"/>
+    </form>
+</body>
+</html>
+
 <?php
 
 require_once 'vendor/autoload.php';
 require_once "./random_string.php";
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
-use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
-use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
 use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
+use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
 use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
+use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 
 $connectionString = "DefaultEndpointsProtocol=https;AccountName=blibblob2;AccountKey=w0ui1/rBkxZ+GrpslxMRscdfezMOo33/dbz3wJbOTWI388Wgb9o6JMCg9NRgSJK7f5u937fjBT7koYuRWuVNmg==;EndpointSuffix=core.windows.net";
 
 // Create blob client.
 $blobClient = BlobRestProxy::createBlobService($connectionString);
 
-$fileToUpload = "HelloWorld.txt";
+$fileToUpload = $_FILES['berkas'];
 
-if (!isset($_GET["Cleanup"])) {
-    // Create container options object.
+if (isset($_POST['SubmitButton'])) { //check if form was submitted
+    // echo "<pre>";
+    // print_r($_FILES);
+    // echo "</pre>";
+
     $createContainerOptions = new CreateContainerOptions();
 
-    // Set public access policy. Possible values are
-    // PublicAccessType::CONTAINER_AND_BLOBS and PublicAccessType::BLOBS_ONLY.
-    // CONTAINER_AND_BLOBS:
-    // Specifies full public read access for container and blob data.
-    // proxys can enumerate blobs within the container via anonymous
-    // request, but cannot enumerate containers within the storage account.
-    //
-    // BLOBS_ONLY:
-    // Specifies public read access for blobs. Blob data within this
-    // container can be read via anonymous request, but container data is not
-    // available. proxys cannot enumerate blobs within the container via
-    // anonymous request.
-    // If this value is not specified in the request, container data is
-    // private to the account owner.
     $createContainerOptions->setPublicAccess(PublicAccessType::CONTAINER_AND_BLOBS);
 
     // Set container metadata.
     $createContainerOptions->addMetaData("key1", "value1");
     $createContainerOptions->addMetaData("key2", "value2");
 
-      $containerName = "blockblobs".generateRandomString();
+    $containerName = "blockblobs" . generateRandomString();
 
     try {
         // Create container.
         $blobClient->createContainer($containerName, $createContainerOptions);
 
         // Getting local file so that we can upload it to Azure
-        $myfile = fopen($fileToUpload, "w") or die("Unable to open file!");
-        fclose($myfile);
-        
+        // $myfile = fopen($fileToUpload, "w") or die("Unable to open file!");
+        // fclose($myfile);
+
         # Upload file as a block blob
-        echo "Uploading BlockBlob: ".PHP_EOL;
+        echo "Uploading BlockBlob: " . PHP_EOL;
         echo $fileToUpload;
         echo "<br />";
-        
-        $content = fopen($fileToUpload, "r");
+
+        // $content = fopen($fileToUpload, "r");
 
         //Upload blob
-        $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
+        // $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
+        $blobClient->createBlockBlob($containerName, $fileToUpload);
 
         // List blobs.
         $listBlobsOptions = new ListBlobsOptions();
-        $listBlobsOptions->setPrefix("HelloWorld");
+        $listBlobsOptions->setPrefix("myImage");
 
         echo "These are the blobs present in the container: ";
 
-        do{
+        do {
             $result = $blobClient->listBlobs($containerName, $listBlobsOptions);
-            foreach ($result->getBlobs() as $blob)
-            {
-                echo $blob->getName().": ".$blob->getUrl()."<br />";
+            foreach ($result->getBlobs() as $blob) {
+                echo $blob->getName() . ": " . $blob->getUrl() . "<br />";
             }
-        
+
             $listBlobsOptions->setContinuationToken($result->getContinuationToken());
-        } while($result->getContinuationToken());
+        } while ($result->getContinuationToken());
         echo "<br />";
 
         // Get blob.
@@ -82,41 +87,18 @@ if (!isset($_GET["Cleanup"])) {
         $blob = $blobClient->getBlob($containerName, $fileToUpload);
         fpassthru($blob->getContentStream());
         echo "<br />";
-    }
-    catch(ServiceException $e){
-        // Handle exception based on error codes and messages.
-        // Error codes and messages are here:
-        // http://msdn.microsoft.com/library/azure/dd179439.aspx
+    } catch (ServiceException $e) {
         $code = $e->getCode();
         $error_message = $e->getMessage();
-        echo $code.": ".$error_message."<br />";
-    }
-    catch(InvalidArgumentTypeException $e){
-        // Handle exception based on error codes and messages.
-        // Error codes and messages are here:
-        // http://msdn.microsoft.com/library/azure/dd179439.aspx
+        echo $code . ": " . $error_message . "<br />";
+    } catch (InvalidArgumentTypeException $e) {
+        
         $code = $e->getCode();
         $error_message = $e->getMessage();
-        echo $code.": ".$error_message."<br />";
+        echo $code . ": " . $error_message . "<br />";
     }
-} 
-else 
-{
 
-    try{
-        // Delete container.
-        echo "Deleting Container".PHP_EOL;
-        echo $_GET["containerName"].PHP_EOL;
-        echo "<br />";
-        $blobClient->deleteContainer($_GET["containerName"]);
-    }
-    catch(ServiceException $e){
-        // Handle exception based on error codes and messages.
-        // Error codes and messages are here:
-        // http://msdn.microsoft.com/library/azure/dd179439.aspx
-        $code = $e->getCode();
-        $error_message = $e->getMessage();
-        echo $code.": ".$error_message."<br />";
-    }
-}
+
+} 
+
 ?>
