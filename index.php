@@ -169,18 +169,19 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
         //Upload blob
         // $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
         try {
-
+        
+            $fileToUpload = $_FILES['berkas']['name'];
         $content = fopen($_FILES['berkas']['tmp_name'], "r");
 
         $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
 
-
         // $type = $_FILES['berkas']['type'];
         // $blob_name = $_FILES['berkas']['name'];
-        // $blob = BlobRestProxy::getBlob($containerName, $blob_name);
-        // header("Content-Type:".$type);
-        // header('Content-Disposition: attachment; filename="' . $blob_name . '"');
-        // fpassthru($blob->getContentStream());
+         // Get blob.
+         echo "This is the content of the blob uploaded: ";
+         $blob = $blobClient->getBlob($containerName, $fileToUpload);
+         fpassthru($blob->getContentStream());
+         echo "<br />";
 
         } catch (ServiceException $e) {
             $code = $e->getCode();
