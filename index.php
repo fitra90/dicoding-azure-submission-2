@@ -118,9 +118,6 @@ require_once 'vendor/autoload.php';
 require_once "./random_string.php";
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
-use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
-use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
-use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 
 $connectionString = "DefaultEndpointsProtocol=https;AccountName=blibblob2;AccountKey=w0ui1/rBkxZ+GrpslxMRscdfezMOo33/dbz3wJbOTWI388Wgb9o6JMCg9NRgSJK7f5u937fjBT7koYuRWuVNmg==;EndpointSuffix=core.windows.net";
@@ -130,90 +127,72 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
 
 if (isset($_POST['SubmitButton'])) { //check if form was submitted
 
-    $fileToUpload = '';
     //UPLOAD FILES
     if (($_FILES['berkas']['name'] != "")) {
+        // echo "<pre>";
+        // echo var_dump($_FILES);
+        // echo "</pre>";
         // Where the file is going to be stored
-        $target_dir = "upload/";
-        $file = $_FILES['berkas']['name'];
-        $path = pathinfo($file);
-        $filename = $path['filename'];
-        $ext = $path['extension'];
-        $temp_name = $_FILES['berkas']['tmp_name'];
-        $path_filename_ext = $target_dir . $filename . "." . $ext;
+        // $target_dir = "upload/";
+        // $file = $_FILES['berkas']['name'];
+        // $path = pathinfo($file);
+        // $filename = $path['filename'];
+        // $ext = $path['extension'];
+        // $temp_name = $_FILES['berkas']['tmp_name'];
+        // $path_filename_ext = $target_dir . $filename . "." . $ext;
 
-        // Check if file already exists
-        if (file_exists($path_filename_ext)) {
-            echo "Sorry, file already exists.";
-        } else {
-            //MOVE FILES TO PROJECT UPLOAD DIRECTORY
-            move_uploaded_file($temp_name, $path_filename_ext);
-            // echo "Congratulations! File Uploaded to Project Directory.";
-            echo "<img src='".$path_filename_ext."' style='width:20%;'>";
+        // // Check if file already exists
+        // if (file_exists($path_filename_ext)) {
+        //     echo "Sorry, file already exists.";
+        // } else {
+        //     //MOVE FILES TO PROJECT UPLOAD DIRECTORY
+        //     move_uploaded_file($temp_name, $path_filename_ext);
+        //     echo "Congratulations! File Uploaded to Project Directory.";
 
-            $fileToUpload = $path_filename_ext;
+        //     $fileToUpload = $path_filename_ext;
 
+        // }
+
+      
+
+        try {
+
+            // Getting local file so that we can upload it to Azure
+            // $myfile = fopen($fileToUpload, "w") or die("Unable to open file!");
+            // fclose($myfile);
+
+            # Upload file as a block blob
+            // echo "Uploading BlockBlob: " . PHP_EOL;
+            // echo $fileToUpload;
+            // echo "<br />";
+
+            $containerName = "imagecontainer";
+
+            //Upload blob
+            // $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
+            $content = fopen($_FILES['berkas']['tmp_name'] . '', "r");
+            $blob->uploadToContainer($content, $containerName);
+
+            // $type = $_FILES['berkas']['type'];
+            // $blob_name = $_FILES['berkas']['name'];
+            // $blob = BlobRestProxy::getBlob($containerName, $blob_name);
+            // header("Content-Type:".$type);
+            // header('Content-Disposition: attachment; filename="' . $blob_name . '"');
+            // fpassthru($blob->getContentStream());
+
+        } catch (ServiceException $e) {
+            $code = $e->getCode();
+            $error_message = $e->getMessage();
+            echo $code . ": " . $error_message . "<br />";
+
+        } catch (InvalidArgumentTypeException $e) {
+
+            $code = $e->getCode();
+            $error_message = $e->getMessage();
+            echo $code . ": " . $error_message . "<br />";
         }
-    }
 
-    $createContainerOptions = new CreateContainerOptions();
-
-    $createContainerOptions->setPublicAccess(PublicAccessType::CONTAINER_AND_BLOBS);
-
-    // Set container metadata.
-    $createContainerOptions->addMetaData("key1", "value1");
-    $createContainerOptions->addMetaData("key2", "value2");
-
-    $containerName = "blockblobs" . generateRandomString();
-
-    try {
-        // Create container.
-        $blobClient->createContainer($containerName, $createContainerOptions);
-
-        // Getting local file so that we can upload it to Azure
-        // $myfile = fopen($fileToUpload, "w") or die("Unable to open file!");
-        // fclose($myfile);
-
-        # Upload file as a block blob
-        echo "Uploading BlockBlob: " . PHP_EOL;
-        echo $fileToUpload;
-        echo "<br />";
-
-        // $content = fopen($fileToUpload, "r");
-
-        //Upload blob
-        // $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
-        $blobClient->createBlockBlob($containerName, $fileToUpload);
-
-        // List blobs.
-        $listBlobsOptions = new ListBlobsOptions();
-        $listBlobsOptions->setPrefix("myImage");
-
-        echo "These are the blobs present in the container: ";
-
-        do {
-            $result = $blobClient->listBlobs($containerName, $listBlobsOptions);
-            foreach ($result->getBlobs() as $blob) {
-                echo $blob->getName() . ": " . $blob->getUrl() . "<br />";
-            }
-
-            $listBlobsOptions->setContinuationToken($result->getContinuationToken());
-        } while ($result->getContinuationToken());
-        echo "<br />";
-
-        // Get blob.
-        echo "This is the content of the blob uploaded: ";
-        $blob = $blobClient->getBlob($containerName, $fileToUpload);
-        echo "<br />";
-    } catch (ServiceException $e) {
-        $code = $e->getCode();
-        $error_message = $e->getMessage();
-        echo $code . ": " . $error_message . "<br />";
-    } catch (InvalidArgumentTypeException $e) {
-
-        $code = $e->getCode();
-        $error_message = $e->getMessage();
-        echo $code . ": " . $error_message . "<br />";
+       
     }
 
 }
