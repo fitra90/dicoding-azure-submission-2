@@ -148,7 +148,8 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
         } else {
             //MOVE FILES TO PROJECT UPLOAD DIRECTORY
             move_uploaded_file($temp_name, $path_filename_ext);
-            echo "Congratulations! File Uploaded to Project Directory.";
+            // echo "Congratulations! File Uploaded to Project Directory.";
+            echo "<img src='".$path_filename_ext."' style='width:50%;'>
 
             $fileToUpload = $path_filename_ext;
 
@@ -203,7 +204,6 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
         // Get blob.
         echo "This is the content of the blob uploaded: ";
         $blob = $blobClient->getBlob($containerName, $fileToUpload);
-        fpassthru($blob->getContentStream());
         echo "<br />";
     } catch (ServiceException $e) {
         $code = $e->getCode();
