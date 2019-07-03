@@ -120,11 +120,6 @@ require_once "./random_string.php";
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 
-$connectionString = "DefaultEndpointsProtocol=https;AccountName=blibblob2;AccountKey=w0ui1/rBkxZ+GrpslxMRscdfezMOo33/dbz3wJbOTWI388Wgb9o6JMCg9NRgSJK7f5u937fjBT7koYuRWuVNmg==;EndpointSuffix=core.windows.net";
-
-// Create blob client.
-$blobClient = BlobRestProxy::createBlobService($connectionString);
-
 if (isset($_POST['SubmitButton'])) { //check if form was submitted
 
     //UPLOAD FILES
@@ -153,52 +148,52 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
 
         // }
 
-      
-
         // try {
 
-            // Getting local file so that we can upload it to Azure
-            // $myfile = fopen($fileToUpload, "w") or die("Unable to open file!");
-            // fclose($myfile);
+        // Getting local file so that we can upload it to Azure
+        // $myfile = fopen($fileToUpload, "w") or die("Unable to open file!");
+        // fclose($myfile);
 
-            # Upload file as a block blob
-            // echo "Uploading BlockBlob: " . PHP_EOL;
-            // echo $fileToUpload;
-            // echo "<br />";
+        # Upload file as a block blob
+        // echo "Uploading BlockBlob: " . PHP_EOL;
+        // echo $fileToUpload;
+        // echo "<br />";
 
-            $containerName = "imagecontainer";
+        $connectionString = "DefaultEndpointsProtocol=https;AccountName=blibblob2;AccountKey=w0ui1/rBkxZ+GrpslxMRscdfezMOo33/dbz3wJbOTWI388Wgb9o6JMCg9NRgSJK7f5u937fjBT7koYuRWuVNmg==;EndpointSuffix=core.windows.net";
 
-            //Upload blob
-            // $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
-            $content = fopen($_FILES['berkas']['tmp_name'] . '', "r");
-            $uploadData = $blob->uploadToContainer($content, $containerName);
+        // Create blob client.
+        $blobClient = BlobRestProxy::createBlobService($connectionString);
 
-            if($uploadData) {
-                echo "Success";
-            } else {
-                echo "Fail!";
-            }
+        $containerName = "imagecontainer";
 
-            // $type = $_FILES['berkas']['type'];
-            // $blob_name = $_FILES['berkas']['name'];
-            // $blob = BlobRestProxy::getBlob($containerName, $blob_name);
-            // header("Content-Type:".$type);
-            // header('Content-Disposition: attachment; filename="' . $blob_name . '"');
-            // fpassthru($blob->getContentStream());
+        //Upload blob
+        // $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
+        try {
 
-        // } catch (ServiceException $e) {
-        //     $code = $e->getCode();
-        //     $error_message = $e->getMessage();
-        //     echo $code . ": " . $error_message . "<br />";
+        $content = fopen($_FILES['berkas']['tmp_name'], "r");
 
-        // } catch (InvalidArgumentTypeException $e) {
+        $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
 
-        //     $code = $e->getCode();
-        //     $error_message = $e->getMessage();
-        //     echo $code . ": " . $error_message . "<br />";
-        // }
 
-       
+        // $type = $_FILES['berkas']['type'];
+        // $blob_name = $_FILES['berkas']['name'];
+        // $blob = BlobRestProxy::getBlob($containerName, $blob_name);
+        // header("Content-Type:".$type);
+        // header('Content-Disposition: attachment; filename="' . $blob_name . '"');
+        // fpassthru($blob->getContentStream());
+
+        } catch (ServiceException $e) {
+            $code = $e->getCode();
+            $error_message = $e->getMessage();
+            echo $code . ": " . $error_message . "<br />";
+
+        } catch (InvalidArgumentTypeException $e) {
+
+            $code = $e->getCode();
+            $error_message = $e->getMessage();
+            echo $code . ": " . $error_message . "<br />";
+        }
+
     }
 
 }
