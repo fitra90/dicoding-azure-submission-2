@@ -16,9 +16,7 @@
     <br><br>
 
 <script type="text/javascript">
-
-var img = new Image();
-img.onload = function() {
+    function processImage() {
      
         var subscriptionKey = "d7b3fef1dd844d2bbcc479775589001d";
 
@@ -105,7 +103,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             echo "<div id='imageDiv' style='width:420px; display:table-cell;'>";
             echo "Uploaded image: ";
             echo "<br><br>";
-            echo "<img id='sourceImage' src='https://blibblob2.blob.core.windows.net/imagecontainer/". $fileToUpload . "' width='20%' />";
+            echo "<img onload='processImage()' id='sourceImage' src='https://blibblob2.blob.core.windows.net/imagecontainer/". $fileToUpload . "' width='20%' />";
             echo "<p class='imageDescription'></p>";
             echo "</div>";
             echo "</div>";
