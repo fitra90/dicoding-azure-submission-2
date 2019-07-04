@@ -97,7 +97,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
 
             echo "<br />";
             echo "Uploaded Image: <br />";
-            echo "<input type='hidden' id='inputImage' value='https://blibblob2.blob.core.windows.net/imagecontainer/". $fileToUpload . "'>";
+            echo "<input type='hidden' id='inputImage' value='https://blibblob2.blob.core.windows.net/imagecontainer/'". $fileToUpload . "'>";
             echo "<div id='wrapper' style='width:1020px; display:table;'>";
             echo "<div id='jsonOutput' style='width:600px; display:table-cell;'>";
             echo "Response:";
@@ -108,7 +108,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             echo "<div id='imageDiv' style='width:420px; display:table-cell;'>";
             echo "Source image:";
             echo "<br><br>";
-            echo "<img id='sourceImage' src='https://blibblob2.blob.core.windows.net/imagecontainer/". $fileToUpload . " width='400' />";
+            echo "<img id='sourceImage' src='https://blibblob2.blob.core.windows.net/imagecontainer/". $fileToUpload . "' width='400' />";
             echo "<button onclick='processImage()'>Analyze image</button>";
             echo "</div>";
             echo "</div>";
