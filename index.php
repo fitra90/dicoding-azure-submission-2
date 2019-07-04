@@ -178,12 +178,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             // $type = $_FILES['berkas']['type'];
             // $blob_name = $_FILES['berkas']['name'];
             // Get blob.
-            echo "This is the content of the blob uploaded: ";
-            $blob = $blobClient->getBlob($containerName, $fileToUpload);
-            header("Content-Type:".$_FILES['berkas']['type']);
-            header('Content-Disposition: attachment; filename="' . $blob_name . '"');
-            fpassthru($blob->getContentStream());
-            echo "<br />";
+            echo "<img src='https://blibblob2.blob.core.windows.net/imagecontainer/".$fileToUpload."'>";
 
         } catch (ServiceException $e) {
             $code = $e->getCode();
