@@ -53,9 +53,8 @@
  
         .done(function(data) {
             // Show formatted JSON on webpage.
-            var description = data.description;
             $("#responseTextArea").val(JSON.stringify(data, null, 2));
-            $(".imageDescription").html(description);
+            console.log(data);
         })
  
         .fail(function(jqXHR, textStatus, errorThrown) {
