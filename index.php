@@ -106,10 +106,9 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             echo "style='width:580px; height:400px;'></textarea>";
             echo "</div>";
             echo "<div id='imageDiv' style='width:420px; display:table-cell;'>";
-            echo "Uploaded image:";
+            echo "Uploaded image: <button onclick='processImage()'>Analyze image</button>";
             echo "<br><br>";
             echo "<img id='sourceImage' src='https://blibblob2.blob.core.windows.net/imagecontainer/". $fileToUpload . "' width='400' />";
-            echo "<button onclick='processImage()'>Analyze image</button>";
             echo "</div>";
             echo "</div>";
 
