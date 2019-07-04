@@ -54,6 +54,7 @@
         .done(function(data) {
             // Show formatted JSON on webpage.
             $("#responseTextArea").val(JSON.stringify(data, null, 2));
+            $(".imageDescription").html(data.description.captions.text);
         })
  
         .fail(function(jqXHR, textStatus, errorThrown) {
@@ -109,6 +110,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             echo "Uploaded image: <button onclick='processImage()'>Analyze image</button>";
             echo "<br><br>";
             echo "<img id='sourceImage' src='https://blibblob2.blob.core.windows.net/imagecontainer/". $fileToUpload . "' width='400' />";
+            echo "<p class='imageDescription'></p>"
             echo "</div>";
             echo "</div>";
 
