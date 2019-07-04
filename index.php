@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
 <body>
+    <h3>Azure Image Analyzer</h3>
     <form action="" method="post" enctype="multipart/form-data">
         <input type="file" name="berkas" />
         <input type="submit" name="SubmitButton"/>
@@ -96,8 +97,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
 
             echo "<br />";
-            echo "Uploaded Image: <br />";
-            echo "<input type='hidden' id='inputImage' value='https://blibblob2.blob.core.windows.net/imagecontainer/'". $fileToUpload . "'>";
+            echo "<input type='hidden' id='inputImage' value='https://blibblob2.blob.core.windows.net/imagecontainer/". $fileToUpload . "'>";
             echo "<div id='wrapper' style='width:1020px; display:table;'>";
             echo "<div id='jsonOutput' style='width:600px; display:table-cell;'>";
             echo "Response:";
@@ -106,7 +106,7 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
             echo "style='width:580px; height:400px;'></textarea>";
             echo "</div>";
             echo "<div id='imageDiv' style='width:420px; display:table-cell;'>";
-            echo "Source image:";
+            echo "Uploaded image:";
             echo "<br><br>";
             echo "<img id='sourceImage' src='https://blibblob2.blob.core.windows.net/imagecontainer/". $fileToUpload . "' width='400' />";
             echo "<button onclick='processImage()'>Analyze image</button>";
