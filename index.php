@@ -54,7 +54,7 @@
         .done(function(data) {
             // Show formatted JSON on webpage.
             $("#responseTextArea").val(JSON.stringify(data, null, 2));
-            console.log(data);
+            console.log(data, null, 2);
         })
  
         .fail(function(jqXHR, textStatus, errorThrown) {
