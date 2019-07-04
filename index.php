@@ -18,7 +18,7 @@
 <script type="text/javascript">
 
 var img = new Image();
-img.onload = function processImage() {
+img.onload = function() {
      
         var subscriptionKey = "d7b3fef1dd844d2bbcc479775589001d";
 
