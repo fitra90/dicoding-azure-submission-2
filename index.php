@@ -166,12 +166,13 @@ if (isset($_POST['SubmitButton'])) { //check if form was submitted
 
         $containerName = "imagecontainer";
 
+        $fileToUpload = $_FILES['berkas']['tmp_name'];
+        $content = fopen($fileToUpload, "r");
+
         //Upload blob
         // $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
         try {
             
-            $fileToUpload = $_FILES['berkas']['tmp_name'];
-
             $blobClient->createBlockBlob($containerName, $content, $fileToUpload);
 
             // Get blob.
